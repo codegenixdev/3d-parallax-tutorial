@@ -2,10 +2,14 @@ import { CardBody, CardContainer, CardItem } from "./3d-hover";
 import { product } from "./data.json";
 
 export default function App() {
+
+
   return (
-    <div className="h-screen bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#ba78bd] to-[#613177]">
+    <div
+      className="h-screen bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#ba78bd] to-[#613177]">
       <CardContainer className="inter-var">
-        <CardBody className="group/card relative flex h-auto w-auto flex-col place-items-center gap-5 rounded-xl border bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#ba78bd] to-[#613177] p-6 hover:shadow-2xl hover:shadow-emerald-500/[0.1] sm:w-[30rem] dark:border-white/[0.2]">
+        <CardBody
+          className="group/card relative flex h-auto w-auto flex-col place-items-center gap-5 rounded-xl border bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#ba78bd] to-[#613177] p-6 hover:shadow-2xl hover:shadow-emerald-500/[0.1] sm:w-[30rem] dark:border-white/[0.2]">
           <CardItem translateZ="200" className="mt-4 w-full">
             <img
               src={product.src}
