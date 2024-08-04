@@ -1,3 +1,5 @@
+!! keep on going copy from main to without-effect, then remove them from main then paste them here
+
 we need to keep track of mouse position
 
 ### start of 3d-hover.tsx
