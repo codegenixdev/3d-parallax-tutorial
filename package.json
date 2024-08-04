@@ -1,5 +1,5 @@
 {
-  "name": "3d-parallax",
+  "name": "3d-parallax-tutorial",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,8 +13,7 @@
     "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.4.0",
-    "zustand": "^4.5.4"
+    "tailwind-merge": "^2.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
