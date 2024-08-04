@@ -1,40 +1,12 @@
+# 3D Parallax in React
+
+This cool 3d parallax hover effect can be achieved with pure React and Tailwind.
+It creates an illusion that different components and layers have depth and it seems that they are detached from the background.
+You can see a live demo of it in the description down below.
+
+## start of 3d-hover.tsx
+
 we need to keep track of mouse position
-
-# !!FIX
-
-remove useEffect to see working or not?
-
-```jsx
-export const CardItem = ({
-  component: Component = "div",
-  children,
-  className,
-  ...rest
-}: {
-  component?: React.ElementType;
-  children: React.ReactNode;
-  className?: string;
-  [key: string]: unknown;
-}) => {
-  const ref = useRef<HTMLDivElement>(null); // [!code --]
-
-  return (
-    <Component
-      ref={ref} // [!code --]
-      className={className} // [!code --]
-      className={cn("w-fit", className)}// [!code ++]
-      {...rest}
-      >
-      {children}
-    </Component>
-  );
-};
-
-```
-
-# Start
-
-### start of 3d-hover.tsx
 
 ```typescript
 const MouseEnterContext = createContext<

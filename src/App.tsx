@@ -1,4 +1,4 @@
-import { CardBody, CardContainer, CardItem } from "./3d-hover";
+import { CardBody, CardContainer, CardItem } from "./3d-parallax";
 import { product } from "./data.json";
 
 export default function App() {
