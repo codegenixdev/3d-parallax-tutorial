@@ -92,14 +92,12 @@ export const CardItem = ({
   children,
   className,
   translateZ = 0,
-  rotateZ = 0,
   ...rest
 }: {
   component?: React.ElementType;
   children: React.ReactNode;
   className?: string;
   translateZ?: number | string;
-  rotateZ?: number | string;
   [key: string]: unknown;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -108,11 +106,11 @@ export const CardItem = ({
   const handleAnimations = useCallback(() => {
     if (!ref.current) return;
     if (isMouseEntered) {
-      ref.current.style.transform = `translateZ(${translateZ}px) rotateZ(${rotateZ}deg)`;
+      ref.current.style.transform = `translateZ(${translateZ}px)`;
     } else {
       ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
     }
-  }, [isMouseEntered, rotateZ, translateZ]);
+  }, [isMouseEntered, translateZ]);
 
   useEffect(() => {
     handleAnimations();
