@@ -8,10 +8,6 @@ import React, {
 } from "react";
 import { cn } from "./utils/cn";
 
-const MouseEnterContext = createContext<
-  [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
->(undefined);
-
 export const CardContainer = ({
   children,
   className,
@@ -41,30 +37,28 @@ export const CardContainer = ({
     containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
   };
   return (
-    <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
+    <div
+      className="flex items-center justify-center py-20"
+      style={{
+        perspective: "1000px",
+      }}
+    >
       <div
-        className="flex items-center justify-center py-20"
+        ref={containerRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className={cn(
+          "relative flex items-center justify-center transition-all duration-200 ease-linear",
+          className,
+        )}
         style={{
-          perspective: "1000px",
+          transformStyle: "preserve-3d",
         }}
       >
-        <div
-          ref={containerRef}
-          onMouseEnter={handleMouseEnter}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          className={cn(
-            "relative flex items-center justify-center transition-all duration-200 ease-linear",
-            className,
-          )}
-          style={{
-            transformStyle: "preserve-3d",
-          }}
-        >
-          {children}
-        </div>
+        {children}
       </div>
-    </MouseEnterContext.Provider>
+    </div>
   );
 };
 
@@ -125,12 +119,4 @@ export const CardItem = ({
       {children}
     </Component>
   );
-};
-
-const useMouseEnter = () => {
-  const context = useContext(MouseEnterContext);
-  if (context === undefined) {
-    throw new Error("useMouseEnter must be used within a MouseEnterProvider");
-  }
-  return context;
 };
