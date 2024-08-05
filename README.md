@@ -1,10 +1,15 @@
-# 3D Parallax in React
+# 3D Parallax Hover in React
+
+You can also watch the whole tutorial on my youtube channel if you are more interested in video format tutorials.
+
+## Video Source
 
 This cool 3d parallax hover effect can be achieved with pure React and Tailwind.
 It creates an illusion that different components and layers have depth and it seems that they are detached from the background.
-You can see a live demo of it in the description down below.
 
-<Parallax />
+## Short Video Demo
+
+We will create a reusable and maintainable component for it to use it in our whole project wherever that we want.
 
 ## Setup
 
@@ -38,21 +43,44 @@ Run the development server
 npm run dev
 ```
 
-And now if you head over to the <http://localhost:5173> you will see the project is running with a simple card which it has the properties of a modern shoe.
+And now if you head over to the [text](http://localhost:5173) you will see the project is running with a simple card which it has the properties of a modern shoe. The problem here is that if you hover over it, it does not have the 3d effect that we want. So we need to implement it.
+
+But before we continue, hit the like button down below and don't forget to subscribe.
 
 ## Overview
 
 The cloned project is a very simple React project created with Vite and with pre-configured Tailwind CSS and a few utility files, some Eslint rules and Prettier config (which sorts the class names of Tailwind classes and you need to have Eslint and Prettier extension/plugin installed on your IDE which is optionals).
 
-!! NOW YOU NEED TO SHOW THE HIERARCHY IN MARKDOWN !!
+These are the important files and folders of base project:
 
-```typescript
+├── src
+│ ├── 3d-parallax.tsx
+│ ├── App.tsx
+│ ├── data.json
+├── public
+│ ├── shoe-1.png
+├── .prettierrc
+└── .eslintrc.cjs
+
+## Steps
+
+Open the 3d-parallax.tsx.
+We have 3 components here, CardContainer, CardBody and CardItem which are responsible to organize the component and making it reusable and maintainable.
+So I decided to divide this component into 3 different component. For now the are here as skeleton and we need to add the 3d hover effect functionality to them.
+
+### Track The User's Mouse Position
+
+We need to keep track of the user's mouse position and use it inside other components. So creating a context for it is reasonable.
+
+```typescript title=3d-parallax.tsx
 const MouseEnterContext = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
 >(undefined);
 ```
 
-```typescript
+Also we need to create a hook to consume the provided context.
+
+```typescript title=3d-parallax.tsx
 const useMouseEnter = () => {
   const context = useContext(MouseEnterContext);
   if (context === undefined) {
@@ -61,6 +89,10 @@ const useMouseEnter = () => {
   return context;
 };
 ```
+
+### Card Container
+
+Now for the CardContainer, we need wrap it inside the context that we just created.
 
 ```jsx
 export const CardContainer = ({
@@ -86,6 +118,8 @@ export const CardContainer = ({
 };
 ```
 
+After that we add the containerRef to the child div to control the components using the mouse events handlers.
+
 ```jsx
 export const CardContainer = ({
   children,
@@ -105,7 +139,7 @@ export const CardContainer = ({
         <div
           ref={containerRef} // [!code ++]
           onMouseEnter={handleMouseEnter} // [!code ++]
-          onMouseMove={handleMouseMove} // [!code +_]
+          onMouseMove={handleMouseMove} // [!code ++]
           onMouseLeave={handleMouseLeave} // [!code ++]
           className={cn("relative flex items-center justify-center", className)}
         >
@@ -117,6 +151,8 @@ export const CardContainer = ({
 };
 ```
 
+Then initialize the mouse events handlers functions.
+
 ```jsx
 export const CardContainer = ({
   children,
@@ -126,6 +162,12 @@ export const CardContainer = ({
   className?: string;
 }) => {
   const [isMouseEntered, setIsMouseEntered] = useState(false);
+
+  const handleMouseEnter = () => {// [!code ++]
+    setIsMouseEntered(true);// [!code ++]
+    if (!containerRef.current) return;// [!code ++]
+  };// [!code ++]
+
   const containerRef = useRef<HTMLDivElement>(null);
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => { // [!code ++]
     if (!containerRef.current) return;// [!code ++]
@@ -134,11 +176,6 @@ export const CardContainer = ({
     const x = (e.clientX - left - width / 2) / 25;// [!code ++]
     const y = (e.clientY - top - height / 2) / 25;// [!code ++]
     containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;// [!code ++]
-  };// [!code ++]
-
-  const handleMouseEnter = () => {// [!code ++]
-    setIsMouseEntered(true);// [!code ++]
-    if (!containerRef.current) return;// [!code ++]
   };// [!code ++]
 
   const handleMouseLeave = () => {// [!code ++]
@@ -197,6 +234,11 @@ export const CardContainer = ({
     containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
   };
 
+Then we add perspective property to the style property of container using inline style because currently does not have perspective utility by default.
+We need to add this style to add depth and 3d-like feeling to the different layers of out card.
+
+Then by adding transformStyle to the child div, we can specify the children to be rendered in 3d space not flattened on its container.
+Also we add some classNames to add smooth animations while switching between different states of our component
   return (
     <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
       <div
@@ -227,6 +269,8 @@ export const CardContainer = ({
 };
 ```
 
+For CardBody component we need to make the div itself and all of its direct children using `&>*` to be rendered in 3d world.
+
 ```jsx
 export const CardBody = ({
   children,
@@ -245,6 +289,9 @@ export const CardBody = ({
   >{children}</div>;
 };
 ```
+
+Now for the most important component of the process, first we need to specify a property called translateZ to specify the amount of depth that we want to add to each CardItems that we need.
+Also add the classNames for smooth animations and also a ref property to control the CardItem more programmatically.
 
 ```jsx
 export const CardItem = ({
@@ -273,6 +320,10 @@ export const CardItem = ({
   );
 };
 ```
+
+Now by the help of the context which is the mouse position state, our ref and a handler function, we can control the component with the most amount of control.
+
+Also we need to put it on an useEffect to run it on each re render.
 
 ```jsx
 export const CardItem = ({
@@ -315,6 +366,9 @@ export const CardItem = ({
   );
 };
 ```
+
+Now that's for the entire 3d parallax component.
+Now using it is very simple. Just head over to the App component and wherever that you want, you can a the translateZ property and specify it with the amount of depth that you want.
 
 ```jsx
 export default function App() {
@@ -369,3 +423,6 @@ export default function App() {
   );
 }
 ```
+
+Now you can re-use this component wherever that you want in your whole application. Just don't forget to put CardItem and CardBody inside the CardContainer to have access to the context of the parent, other wise you will get an exception.
+Thanks for watching. See you in the next video.
