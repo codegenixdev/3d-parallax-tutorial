@@ -1,8 +1,6 @@
-# 3D Parallax Hover in React
+## Watch Video on Youtube
 
-You can also watch the whole tutorial on my youtube channel if you are more interested in video format tutorials.
-
-## Video Source
+<YoutubeEmbed src="https://www.youtube.com/embed/SVQiDX0CbDs" />
 
 This cool 3d parallax hover effect can be achieved with pure React and Tailwind.
 It creates an illusion that different components and layers have depth and it seems that they are detached from the background.
@@ -204,6 +202,12 @@ export const CardContainer = ({
 };
 ```
 
+Then we add perspective property to the style property of container using inline style because currently does not have perspective utility by default.
+We need to add this style to add depth and 3d-like feeling to the different layers of out card.
+
+Then by adding transformStyle to the child div, we can specify the children to be rendered in 3d space not flattened on its container.
+Also we add some classNames to add smooth animations while switching between different states of our component
+
 ```jsx
 export const CardContainer = ({
   children,
@@ -234,11 +238,6 @@ export const CardContainer = ({
     containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
   };
 
-Then we add perspective property to the style property of container using inline style because currently does not have perspective utility by default.
-We need to add this style to add depth and 3d-like feeling to the different layers of out card.
-
-Then by adding transformStyle to the child div, we can specify the children to be rendered in 3d space not flattened on its container.
-Also we add some classNames to add smooth animations while switching between different states of our component
   return (
     <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
       <div
